@@ -1,0 +1,340 @@
+/* ==========================================================================
+   requirements.css — ApplyReady AI
+   Professional Application Setup & Document Upload Flow
+   ========================================================================== */
+
+.requirements-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 5% 80px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    transition: color 0.15s ease;
+}
+
+.back-link:hover {
+    color: var(--text-primary);
+}
+
+.page-heading {
+    margin-bottom: 32px;
+}
+
+.page-heading h1 {
+    font-size: clamp(28px, 4vw, 36px);
+    letter-spacing: -0.8px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 6px 0 8px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--brand-accent);
+    text-transform: uppercase;
+}
+
+.muted {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-xs);
+}
+
+.form-card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 20px 0 8px;
+}
+
+label:first-of-type {
+    margin-top: 14px;
+}
+
+.req-star {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+.optional {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 13px;
+}
+
+input[type="text"],
+input[type="url"],
+textarea,
+select {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    box-shadow: var(--shadow-xs);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--brand-accent-subtle);
+}
+
+select option {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
+}
+
+/* File drop zones */
+.file-drop-zone {
+    display: block;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 20px 22px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    background: var(--bg-subtle);
+    user-select: none;
+    margin-top: 6px;
+}
+
+.file-drop-zone:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+}
+
+.file-drop-zone.drag-over {
+    border-color: var(--brand-accent);
+    background: var(--brand-accent-subtle);
+}
+
+.file-drop-zone.has-file {
+    border-color: var(--status-pass-border);
+    background: var(--status-pass-bg);
+}
+
+.file-drop-zone.file-error {
+    border-color: var(--status-fail-border);
+    background: var(--status-fail-bg);
+}
+
+.hidden-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.drop-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.drop-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.drop-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+}
+
+.drop-file-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.drop-file-subtext {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* URL row */
+.url-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.url-row input {
+    flex: 1;
+}
+
+.url-fetch-btn {
+    white-space: nowrap;
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+.url-fetch-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Field hints and errors */
+.field-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+.field-error {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 4px;
+    min-height: 16px;
+    font-weight: 500;
+}
+
+.success-hint { color: #10b981; }
+.warn-hint    { color: #f59e0b; }
+.error-hint   { color: #ef4444; }
+
+/* Upload note */
+.upload-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 22px;
+    padding: 12px 16px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+.upload-note strong {
+    color: var(--text-primary);
+}
+
+/* Form actions */
+.form-actions {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.form-actions .secondary-btn {
+    color: var(--text-secondary);
+}
+
+.form-actions .primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Progress */
+.progress-section {
+    margin-top: 24px;
+}
+
+.progress-section.hidden {
+    display: none;
+}
+
+.progress-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.spinner {
+    width: 26px;
+    height: 26px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--brand-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Form message */
+.form-message {
+    margin-top: 16px;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+.error-message {
+    color: #ef4444;
+}
+
+@media (max-width: 600px) {
+    .form-card {
+        padding: 22px 18px;
+    }
+    .url-row {
+        flex-direction: column;
+    }
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+    .form-actions .secondary-btn,
+    .form-actions .primary-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

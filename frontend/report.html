@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readiness Report | ApplyReady AI</title>
+    <script>!function(){var t=localStorage.getItem("applyready_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t)}();</script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="report.css">
+</head>
+<body>
+    <header class="no-print">
+        <a href="index.html" class="logo-link">
+            <span class="logo-brand">ApplyReady</span>
+            <span class="logo-badge">AI</span>
+        </a>
+        <nav>
+            <a href="review.html">← Back to Review</a>
+            <button onclick="window.print()" class="primary-btn print-btn">🖨 Print / Save PDF</button>
+        </nav>
+    </header>
+
+    <main class="report-page">
+        <div class="report-header">
+            <div class="report-brand" id="rReportTitle">ApplyReady <span>AI</span> — Readiness Report</div>
+            <div id="reportMeta" class="report-meta"></div>
+        </div>
+
+        <!-- EXECUTIVE SUMMARY -->
+        <section class="report-section" id="rExecutiveSummarySection">
+            <h2>Executive Summary</h2>
+            <div id="rExecutiveSummary"></div>
+        </section>
+
+        <section class="report-section" id="rOpportunitySection">
+            <h2>Opportunity &amp; Target Profile</h2>
+            <table class="report-table">
+                <tr><td>Category</td><td id="rDomain">—</td></tr>
+                <tr><td>Opportunity / Role</td><td id="rName">—</td></tr>
+                <tr><td>Official URL / Listing</td><td id="rUrl">—</td></tr>
+            </table>
+        </section>
+
+        <!-- INTERNSHIP SECTIONS -->
+        <section class="report-section" id="rInternshipAlignmentSection" style="display:none">
+            <h2>Role Alignment &amp; Dimensional Index</h2>
+            <div id="rInternshipAlignment"></div>
+        </section>
+
+        <section class="report-section" id="rBeforeAfterSection" style="display:none">
+            <h2>CV Optimization Impact (Before vs. After Rerun)</h2>
+            <div id="rBeforeAfter"></div>
+        </section>
+
+        <section class="report-section" id="rInternshipSkillsSection" style="display:none">
+            <h2>Skills Matrix &amp; Evidence Grounding</h2>
+            <div id="rInternshipSkills"></div>
+        </section>
+
+        <section class="report-section" id="rProofOfSkillSection" style="display:none">
+            <h2>Proof-of-Skill Verification (GitHub)</h2>
+            <div id="rProofOfSkill"></div>
+        </section>
+
+        <section class="report-section" id="rCvLabSection" style="display:none">
+            <h2>CV Improvement Lab — Accepted Revisions</h2>
+            <div id="rCvLab"></div>
+        </section>
+
+        <section class="report-section" id="rInternshipNextStepsSection" style="display:none">
+            <h2>Prioritized Next Steps &amp; Action Plan</h2>
+            <div id="rInternshipNextSteps"></div>
+        </section>
+
+        <!-- DOCUMENT INTEGRITY (SHARED) -->
+        <section class="report-section" id="rIntegritySection" style="display:none">
+            <h2>Document Integrity &amp; Structural Analysis</h2>
+            <div id="rIntegrity"></div>
+        </section>
+
+
+        <!-- SCHOLARSHIP SECTIONS -->
+        <section class="report-section" id="rEligibilitySection">
+            <h2>Eligibility Results</h2>
+            <div id="rEligibility"></div>
+        </section>
+
+        <section class="report-section" id="rExtractionSection">
+            <h2>Extracted Document Fields</h2>
+            <div id="rExtraction"></div>
+        </section>
+
+        <section class="report-section" id="rComparisonSection">
+            <h2>Document Consistency</h2>
+            <div id="rComparison"></div>
+        </section>
+
+        <section class="report-section" id="rClassificationSection" style="display:none">
+            <h2>Document Classification</h2>
+            <div id="rClassification"></div>
+        </section>
+
+        <section class="report-section" id="rIssuesSection">
+            <h2>Priority Corrective Actions</h2>
+            <div id="rIssues"></div>
+        </section>
+
+        <section class="report-section" id="rGenaiSection" style="display:none">
+            <h2>AI Application Guidance</h2>
+            <div id="rGenai" class="genai-report-content"></div>
+        </section>
+
+        <section class="report-section report-limitations">
+            <h2>Assessment Limitations</h2>
+            <ul>
+                <li>This tool extracts fields using rule-based patterns. Values not matching a known label format will not be detected.</li>
+                <li>Scanned or image-based PDFs cannot be automatically extracted.</li>
+                <li>This report is based only on the documents uploaded at the time of assessment.</li>
+                <li>This assessment does not guarantee scholarship selection or internship placement.</li>
+                <li>Verify all findings against official opportunity documents before submitting your application.</li>
+            </ul>
+        </section>
+
+        <div class="report-footer">
+            Generated by ApplyReady AI — <span id="reportTimestamp"></span> — Demo Prototype
+        </div>
+    </main>
+
+    <script src="shared.js"></script>
+    <script src="report.js"></script>
+</body>
+</html>

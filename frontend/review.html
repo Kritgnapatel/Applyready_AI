@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Review | ApplyReady AI</title>
+    <script>!function(){var t=localStorage.getItem("applyready_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t)}();</script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="review.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <span class="logo-brand">ApplyReady</span>
+            <span class="logo-badge">AI</span>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="review-page">
+        <a href="javascript:history.back()" class="back-link">← Back</a>
+
+        <!-- Status bar -->
+        <div id="overallStatusBar" class="status-bar hidden">
+            <span id="statusBarIcon"></span>
+            <div>
+                <strong id="statusBarLabel"></strong>
+                <p id="statusBarReason" class="muted"></p>
+            </div>
+        </div>
+
+        <div class="page-heading">
+            <p class="eyebrow">VERIFICATION REPORT</p>
+            <h1>Application Readiness Review</h1>
+            <p class="muted">Evidence-backed results from your submitted documents.</p>
+        </div>
+
+        <!-- Opportunity Details -->
+        <section class="review-card">
+            <h2>Opportunity Details</h2>
+            <div class="review-row">
+                <span>Category</span>
+                <strong id="reviewDomain">—</strong>
+            </div>
+            <div class="review-row">
+                <span>Opportunity</span>
+                <strong id="reviewName">—</strong>
+            </div>
+            <div class="review-row">
+                <span>Official URL</span>
+                <strong id="reviewUrl">Not provided</strong>
+            </div>
+            <div class="review-row vertical">
+                <span>Requirements provided</span>
+                <p id="reviewRequirements" class="muted">Not provided</p>
+            </div>
+        </section>
+
+        <!-- Uploaded Documents -->
+        <section class="review-card">
+            <h2>Uploaded Documents</h2>
+            <div id="reviewFiles" class="review-files">
+                <p class="muted">No documents found.</p>
+            </div>
+        </section>
+
+        <!-- INTERNSHIP INTELLIGENCE: Alignment & Dimensional Breakdown -->
+        <section class="review-card" id="internshipAlignmentSection" style="display:none">
+            <div class="card-header-flex">
+                <h2>Role Alignment &amp; Dimensional Index</h2>
+                <span id="internshipBadge" class="status-pill"></span>
+            </div>
+            <p class="muted section-note">
+                Measures skill coverage and evidence grounding from your submitted documents against the role requirements.
+                This is a technical alignment index, not a hiring prediction.
+            </p>
+            <div id="internshipAlignmentOverview" class="alignment-overview"></div>
+            <div id="internshipDimensions" class="dimensions-grid"></div>
+        </section>
+
+        <!-- INTERNSHIP INTELLIGENCE: Skills Evidence Matrix -->
+        <section class="review-card" id="internshipSkillsMatrixSection" style="display:none">
+            <h2>Technical Skills Matrix &amp; Evidence Grounding</h2>
+            <p class="muted section-note">Every technical requirement extracted from the Job Description, matched against evidence citations in your CV.</p>
+            <div id="internshipSkillsList" class="result-list"></div>
+        </section>
+
+        <!-- INTERNSHIP INTELLIGENCE: Proof-of-Skill (GitHub Verification) -->
+        <section class="review-card" id="proofOfSkillSection" style="display:none">
+            <div class="card-header-flex">
+                <h2>Proof-of-Skill Verification <span class="tag-tech">GitHub</span></h2>
+                <span id="proofOfSkillBadge" class="status-pill"></span>
+            </div>
+            <p class="muted section-note">Non-invasive inspection of public GitHub repository manifests and languages to verify declared technical skills.</p>
+            <div id="proofOfSkillDetails" class="result-list"></div>
+        </section>
+
+        <section class="review-card" id="cvImprovementLabSection" style="display:none">
+            <div class="card-header-flex">
+                <h2>CV Improvement Lab <span class="tag-lab">Truth-Preserving</span></h2>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button type="button" id="copyAcceptedBulletsBtn" class="secondary-btn btn-sm">📋 Copy Accepted Bullets</button>
+                    <button type="button" id="rerunCvAnalysisBtn" class="primary-btn btn-sm" style="background:#00e5a3;color:#0f172a;font-weight:700;display:none;">⚡ Rerun Analysis with Accepted Bullets</button>
+                </div>
+            </div>
+            <p class="muted section-note">
+                Evidence-grounded revisions refactored with active engineering delivery verbs.
+                <strong>Integrity guaranteed:</strong> Never fabricates metrics, numbers, or unearned experience.
+            </p>
+            <div id="beforeAfterImpactCard" style="display:none;margin-bottom:16px;"></div>
+            <div id="cvSuggestionsList" class="cv-lab-list"></div>
+        </section>
+
+
+        <!-- DOCUMENT INTEGRITY & TAMPER-RISK ANALYZER -->
+        <section class="review-card" id="documentIntegritySection" style="display:none">
+            <div class="card-header-flex">
+                <h2>Document Integrity &amp; Structural Analysis</h2>
+                <span id="integrityBadge" class="status-pill"></span>
+            </div>
+            <p class="muted section-note">Evaluates technical PDF metadata, export software, font consistency, and text layers to ensure applicant tracking compatibility.</p>
+            <div id="integrityDetails" class="result-list"></div>
+        </section>
+
+        <!-- SCHOLARSHIP: Eligibility Verification -->
+        <section class="review-card" id="eligibilitySection">
+            <h2>Eligibility Verification</h2>
+            <p class="muted section-note">Deterministic checks against stated requirements. These are not AI predictions.</p>
+            <div id="eligibilityDetails" class="result-list">
+                <p class="muted">No eligibility data.</p>
+            </div>
+        </section>
+
+        <!-- Extracted Document Fields -->
+        <section class="review-card" id="extractionSection">
+            <h2>Extracted Document Evidence</h2>
+            <p class="muted section-note">Fields automatically extracted from your resume PDF. Missing fields mean the pattern was not found — not that you are ineligible.</p>
+            <div id="extractionDetails" class="result-list">
+                <p class="muted">No extraction data.</p>
+            </div>
+        </section>
+
+        <!-- Document Consistency Check -->
+        <section class="review-card" id="comparisonSection">
+            <h2>Document Consistency Check</h2>
+            <p class="muted section-note">Compares fields extracted from your resume and marksheet. Upload both as PDFs for best results.</p>
+            <div id="comparisonDetails" class="result-list">
+                <p class="muted">No comparison data.</p>
+            </div>
+        </section>
+
+        <!-- Document Classification -->
+        <section class="review-card" id="classificationSection" style="display:none">
+            <h2>Document Classification</h2>
+            <p class="muted section-note">Automatic document type detection. Review if confidence is below 60%.</p>
+            <div id="classificationDetails" class="result-list"></div>
+        </section>
+
+        <!-- Priority Issues -->
+        <section class="review-card" id="issuesSection" style="display:none">
+            <h2>Priority Issues to Address</h2>
+            <p class="muted section-note">Items that need your attention before submitting.</p>
+            <div id="issuesList" class="result-list"></div>
+        </section>
+
+        <!-- AI Explanation -->
+        <section class="review-card" id="genaiSection" style="display:none">
+            <h2>AI Assistant Guidance <span class="ai-badge">AI</span></h2>
+            <p class="muted section-note">
+                Generated from your verification results, not raw document text.
+                This is a suggestion, not an official assessment.
+            </p>
+            <div id="genaiContent" class="genai-box">
+                <div class="spinner-inline"></div>
+                <span>Loading AI suggestions…</span>
+            </div>
+        </section>
+
+        <!-- Actions -->
+        <div class="review-actions">
+            <a href="requirements.html" id="editReassessBtn" class="secondary-btn">Edit &amp; Reassess</a>
+            <a href="report.html" id="viewReportBtn" class="secondary-btn">📄 Printable Report</a>
+            <button id="downloadReportBtn" class="secondary-btn">📥 Download Report</button>
+            <a href="dashboard.html" class="primary-btn">Back to Dashboard</a>
+        </div>
+
+        <p id="reviewMessage" class="review-message" aria-live="polite"></p>
+
+        <div class="disclaimer-notice">
+            ⚠️ This is an automated readiness assessment. It does not guarantee scholarship selection
+            or internship placement. Verified facts, unmet criteria, and items requiring human review are clearly distinguished.
+        </div>
+    </main>
+
+    <footer>
+        <h3>ApplyReady <span>AI</span></h3>
+        <p>Prepare better. Apply smarter.</p>
+    </footer>
+
+    <script src="shared.js"></script>
+    <script src="review.js"></script>
+</body>
+</html>

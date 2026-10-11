@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Application | ApplyReady AI</title>
+    <script>!function(){var t=localStorage.getItem("applyready_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t)}();</script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="requirements.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-link">
+            <span class="logo-brand">ApplyReady</span>
+            <span class="logo-badge">AI</span>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="requirements-page">
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+
+        <div class="page-heading">
+            <p class="eyebrow">APPLICATION SETUP</p>
+            <h1>Let's prepare your application.</h1>
+            <p class="muted">Tell us about the opportunity and add your documents for verification.</p>
+        </div>
+
+        <form id="applicationForm" novalidate>
+            <section class="form-card">
+                <h2>01. Opportunity details</h2>
+                <p class="muted">Provide the official opportunity information.</p>
+
+                <label for="domain">Application category <span class="req-star">*</span></label>
+                <select id="domain" name="domain" required>
+                    <option value="">Select category</option>
+                    <option value="scholarship">Scholarship</option>
+                    <option value="internship">Internship</option>
+                </select>
+                <p class="field-error" id="domainError"></p>
+
+                <label for="opportunityName">Opportunity name <span class="req-star">*</span></label>
+                <input id="opportunityName" name="opportunityName"
+                       type="text" placeholder="e.g. Summer Research Internship"
+                       maxlength="200" required>
+                <p class="field-error" id="opportunityNameError"></p>
+
+                <label for="officialUrl">Official website URL <span class="optional">(optional)</span></label>
+                <div class="url-row">
+                    <input id="officialUrl" name="officialUrl" type="url"
+                           placeholder="https://example.com/opportunity">
+                    <button type="button" id="fetchUrlBtn" class="secondary-btn url-fetch-btn" disabled>
+                        Fetch Requirements
+                    </button>
+                </div>
+                <p class="field-hint" id="urlFetchStatus"></p>
+
+                <div id="githubUrlGroup" style="display: none; margin-top: 1rem;">
+                    <label for="githubUrl">GitHub Repository or Profile URL <span class="optional">(Proof-of-Skill verification)</span></label>
+                    <input id="githubUrl" name="githubUrl" type="url"
+                           placeholder="https://github.com/username/project">
+                    <p class="field-hint">Proof-of-Skill safely checks project manifests (package.json, requirements.txt, pom.xml) and languages to verify technical skills claimed in your CV.</p>
+                </div>
+
+                <label for="requirementsText"><span id="requirementsLabel">Requirements</span> <span class="optional">(optional)</span></label>
+                <textarea id="requirementsText" name="requirementsText" rows="6"
+                    placeholder="Paste eligibility criteria, required documents, minimum CGPA, graduation year...&#10;&#10;Example: Minimum CGPA of 8.0, B.Tech students, Batch of 2026 only."></textarea>
+                <p class="field-hint" id="requirementsHint">Tip: Include minimum CGPA, graduation year, required documents, and degree requirements for best results.</p>
+
+                <label>Requirements PDF <span class="optional">(optional)</span></label>
+                <label class="file-drop-zone" id="reqFileZone" for="requirementsFile">
+                    <input id="requirementsFile" name="requirementsFile"
+                           type="file" accept=".pdf,application/pdf" class="hidden-input">
+                    <div class="drop-inner">
+                        <span class="drop-icon">📄</span>
+                        <div class="drop-text-group">
+                            <span id="reqFileName" class="drop-file-name">Click or drop requirements PDF here</span>
+                            <span class="drop-file-subtext">Extracts eligibility criteria from official brochure or circular · Max 5MB</span>
+                        </div>
+                    </div>
+                </label>
+            </section>
+
+            <section class="form-card">
+                <h2>02. Upload your documents</h2>
+                <p class="muted">Upload your academic documents for verification. Text is extracted from PDFs for CGPA, graduation year, and degree matching.</p>
+
+                <label>Resume / CV <span class="req-star">*</span></label>
+                <label class="file-drop-zone" id="resumeZone" for="resume">
+                    <input id="resume" name="resume" type="file"
+                           accept=".pdf,.png,.jpg,.jpeg" class="hidden-input">
+                    <div class="drop-inner">
+                        <span class="drop-icon">📋</span>
+                        <div class="drop-text-group">
+                            <span id="resumeFileName" class="drop-file-name">Click or drop your Resume / CV here (Required)</span>
+                            <span class="drop-file-subtext">PDF recommended for automatic field extraction · Max 5MB</span>
+                        </div>
+                    </div>
+                </label>
+                <p class="field-error" id="resumeError"></p>
+
+                <label>Marksheet / Academic record <span class="optional">(optional)</span></label>
+                <label class="file-drop-zone" id="marksheetZone" for="marksheet">
+                    <input id="marksheet" name="marksheet" type="file"
+                           accept=".pdf,.png,.jpg,.jpeg" class="hidden-input">
+                    <div class="drop-inner">
+                        <span class="drop-icon">📊</span>
+                        <div class="drop-text-group">
+                            <span id="marksheetFileName" class="drop-file-name">Click or drop marksheet / grade card here</span>
+                            <span class="drop-file-subtext">Enables cross-document consistency check against resume · Max 5MB</span>
+                        </div>
+                    </div>
+                </label>
+
+                <label>Certificate / Supporting document <span class="optional">(optional)</span></label>
+                <label class="file-drop-zone" id="certificateZone" for="certificate">
+                    <input id="certificate" name="certificate" type="file"
+                           accept=".pdf,.png,.jpg,.jpeg" class="hidden-input">
+                    <div class="drop-inner">
+                        <span class="drop-icon">🏆</span>
+                        <div class="drop-text-group">
+                            <span id="certificateFileName" class="drop-file-name">Click or drop certificate here</span>
+                            <span class="drop-file-subtext">Course completion or achievement certificate · Max 5MB</span>
+                        </div>
+                    </div>
+                </label>
+
+                <p class="upload-note">
+                    <strong>Privacy:</strong> Documents are processed by our local verification engine to extract key fields and evidence. 
+                    Files are stored with randomised names in a private directory, not accessible from the browser.
+                </p>
+            </section>
+
+            <div class="form-actions">
+                <a href="dashboard.html" class="secondary-btn">Cancel</a>
+                <button type="submit" id="submitBtn" class="primary-btn">Verify Application →</button>
+            </div>
+        </form>
+
+        <div id="progressSection" class="progress-section hidden">
+            <div class="progress-card">
+                <div class="spinner"></div>
+                <div>
+                    <strong id="progressTitle">Processing…</strong>
+                    <p id="progressDetail" class="muted"></p>
+                </div>
+            </div>
+        </div>
+
+        <p id="formMessage" class="form-message" aria-live="polite"></p>
+    </main>
+
+    <footer>
+        <h3>ApplyReady <span>AI</span></h3>
+        <p>Prepare better. Apply smarter.</p>
+    </footer>
+
+    <script src="shared.js"></script>
+    <script src="requirements.js"></script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+/* ==========================================================================
+   review.css — ApplyReady AI
+   Professional Verification Review, Skills Matrix & CV Improvement Lab
+   ========================================================================== */
+
+.review-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 36px 5% 80px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 22px;
+    transition: color 0.15s ease;
+}
+
+.back-link:hover {
+    color: var(--text-primary);
+}
+
+.page-heading {
+    margin-bottom: 28px;
+}
+
+.page-heading h1 {
+    font-size: clamp(24px, 3.5vw, 34px);
+    letter-spacing: -0.8px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 6px 0 8px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--brand-accent);
+    text-transform: uppercase;
+}
+
+/* Review card */
+.review-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 26px 30px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow-xs);
+}
+
+.review-card h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+/* Row in details table */
+.review-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    gap: 16px;
+    font-size: 14px;
+}
+
+.review-row span:first-child {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    min-width: 140px;
+}
+
+.review-row strong {
+    text-align: right;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.review-row.vertical {
+    flex-direction: column;
+}
+
+.review-row.vertical p {
+    color: var(--text-secondary);
+    margin: 6px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.review-row:last-child {
+    border-bottom: none;
+}
+
+/* Files */
+.review-files {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* Result list */
+.result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+/* AI badge */
+.ai-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--brand-accent-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--brand-accent);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+}
+
+/* GenAI box */
+.genai-box {
+    padding: 18px 20px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    min-height: 60px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    line-height: 1.6;
+}
+
+/* Spinner inline */
+.spinner-inline {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--brand-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Review actions */
+.review-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.review-actions .primary-btn,
+.review-actions .secondary-btn {
+    font-size: 14px;
+}
+
+/* Review message */
+.review-message {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    margin-bottom: 12px;
+}
+
+/* Disclaimer */
+.disclaimer-notice {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    line-height: 1.6;
+    margin-top: 24px;
+}
+
+/* Overall status bar */
+.status-bar.hidden {
+    display: none;
+}
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-xs);
+}
+
+/* ─── Internship Intelligence & CV Lab Styles ─────────────────────────── */
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.status-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pill.strong_alignment,
+.status-pill.evidence_found,
+.status-pill.no_obvious_anomaly_detected {
+    background: var(--status-pass-bg);
+    border: 1px solid var(--status-pass-border);
+    color: var(--status-pass-text);
+}
+
+.status-pill.moderate_alignment,
+.status-pill.partial_evidence,
+.status-pill.review_recommended {
+    background: var(--status-warn-bg);
+    border: 1px solid var(--status-warn-border);
+    color: var(--status-warn-text);
+}
+
+.status-pill.significant_gaps,
+.status-pill.not_found_in_inspected_files {
+    background: var(--status-fail-bg);
+    border: 1px solid var(--status-fail-border);
+    color: var(--status-fail-text);
+}
+
+.tag-tech,
+.tag-lab {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.tag-tech {
+    background: var(--brand-accent-subtle);
+    color: var(--brand-accent);
+    border: 1px solid var(--border-color);
+}
+
+.tag-lab {
+    background: var(--brand-accent-subtle);
+    color: var(--brand-accent);
+    border: 1px solid var(--border-color);
+}
+
+/* Alignment Overview */
+.alignment-overview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    gap: 20px;
+}
+
+.alignment-stat-big {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--brand-accent);
+    line-height: 1;
+}
+
+.alignment-label-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 4px;
+}
+
+/* Dimensions Grid */
+.dimensions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.dim-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.dim-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.dim-val {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.dim-progress-track {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.dim-progress-fill {
+    height: 100%;
+    background: var(--brand-accent);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+/* Skills Matrix */
+.skill-card-item {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+}
+
+.skill-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.skill-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.skill-category-badge {
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+.skill-evidence-quote {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border-left: 3px solid var(--brand-accent);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-style: italic;
+    line-height: 1.5;
+    border: 1px solid var(--border-color);
+    border-left-width: 3px;
+}
+
+/* CV Improvement Lab Cards */
+.cv-lab-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.cv-sug-card {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px;
+    transition: border-color 0.2s;
+}
+
+.cv-sug-card.status-accepted {
+    border-color: var(--status-pass-border);
+    background: var(--status-pass-bg);
+}
+
+.cv-sug-card.status-rejected {
+    opacity: 0.55;
+    border-color: var(--status-fail-border);
+}
+
+.cv-sug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.cv-sug-reason {
+    font-size: 13px;
+    color: var(--status-warn-text);
+    margin-bottom: 12px;
+}
+
+.bullet-diff-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.bullet-orig {
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.bullet-revised {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.bullet-revised code {
+    background: var(--brand-accent-subtle);
+    color: var(--brand-accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+}
+
+.cv-action-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    justify-content: flex-end;
+}
+
+.btn-sm {
+    padding: 5px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.btn-accept {
+    background: var(--brand-primary);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-accept:hover {
+    background: var(--brand-primary-hover);
+}
+
+.btn-reject {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-reject:hover {
+    background: var(--status-fail-bg);
+    color: var(--status-fail-text);
+    border-color: var(--status-fail-border);
+}
+
+/* Document Integrity metadata list */
+.integrity-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+
+.integrity-anomaly-card {
+    background: var(--status-warn-bg);
+    border-left: 3px solid var(--status-warn-border);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--status-warn-text);
+    margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+    .review-card {
+        padding: 20px 16px;
+    }
+    .review-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+    .review-row span:first-child {
+        min-width: unset;
+    }
+    .review-actions {
+        flex-direction: column;
+    }
+    .review-actions > * {
+        width: 100%;
+        text-align: center;
+    }
+}

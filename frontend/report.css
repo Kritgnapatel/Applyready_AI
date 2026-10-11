@@ -1,0 +1,292 @@
+/* ==========================================================================
+   report.css — ApplyReady AI
+   Professional Application Readiness & Verification Report
+   ========================================================================== */
+
+.report-page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 5% 80px;
+    font-size: 14px;
+}
+
+.report-header {
+    border-bottom: 2px solid var(--brand-accent);
+    padding-bottom: 18px;
+    margin-bottom: 30px;
+}
+
+.report-brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.report-brand span {
+    color: var(--brand-accent);
+}
+
+.report-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.report-section {
+    margin-bottom: 30px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.report-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--brand-accent);
+    letter-spacing: 0.3px;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.report-table th,
+.report-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+}
+
+.report-table td:first-child {
+    color: var(--text-muted);
+    width: 36%;
+    font-weight: 500;
+}
+
+.report-table th {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: var(--bg-subtle);
+}
+
+.report-table .not-found {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.report-table .section-row td {
+    background: var(--bg-subtle);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ev-ref {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.next-step {
+    color: var(--brand-accent);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Issue items */
+.issue-item {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid;
+    border: 1px solid var(--border-color);
+    border-left-width: 4px;
+}
+
+.issue-item.severity-high {
+    border-left-color: #ef4444;
+    background: var(--status-fail-bg);
+}
+
+.issue-item.severity-medium {
+    border-left-color: #f59e0b;
+    background: var(--status-warn-bg);
+}
+
+.issue-item.severity-low {
+    border-left-color: #10b981;
+    background: var(--status-pass-bg);
+}
+
+.issue-item strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.issue-item p {
+    color: var(--text-secondary);
+    margin: 3px 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Limitations */
+.report-limitations ul {
+    padding-left: 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* Action Steps */
+.step-card {
+    padding: 14px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--brand-accent);
+}
+
+.step-card.step-priority-high {
+    border-left-color: #ef4444;
+}
+
+.step-card.step-priority-medium {
+    border-left-color: #f59e0b;
+}
+
+.step-card.step-priority-low {
+    border-left-color: #10b981;
+}
+
+.step-card h3 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.step-card p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Status Pills in Reports */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pill.strong_alignment,
+.status-pill.eligible,
+.status-pill.pass,
+.status-pill.clean {
+    background: var(--status-pass-bg);
+    color: var(--status-pass-text);
+    border: 1px solid var(--status-pass-border);
+}
+
+.status-pill.moderate_alignment,
+.status-pill.needs_review,
+.status-pill.not_run,
+.status-pill.unavailable {
+    background: var(--status-warn-bg);
+    color: var(--status-warn-text);
+    border: 1px solid var(--status-warn-border);
+}
+
+.status-pill.significant_gaps,
+.status-pill.not_met,
+.status-pill.anomalous {
+    background: var(--status-fail-bg);
+    color: var(--status-fail-text);
+    border: 1px solid var(--status-fail-border);
+}
+
+/* Footer */
+.report-footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.print-btn {
+    font-size: 13px;
+    padding: 10px 18px;
+}
+
+/* Print styles */
+@page {
+    margin: 15mm;
+    size: A4 portrait;
+}
+
+@media print {
+    :root {
+        --bg: #ffffff;
+        --card: #f8f9fa;
+        --text: #111827;
+        --muted: #6b7280;
+        --primary: #4f46e5;
+        --cyan: #0284c7;
+    }
+    .no-print { display: none !important; }
+    body { background: white !important; color: #111827 !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .report-page { padding: 0; max-width: 100%; }
+    .report-header { border-bottom: 2px solid #0f172a; margin-bottom: 20px; }
+    .report-brand { color: #0f172a; font-size: 20px; }
+    .report-brand span { color: #0284c7; }
+    .report-section { break-inside: avoid; page-break-inside: avoid; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; padding-bottom: 16px; }
+    .report-section h2 { color: #0f172a; font-size: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
+    .report-table { font-size: 12px; }
+    .report-table th, .report-table td { border-bottom: 1px solid #e2e8f0; color: #1e293b; padding: 6px 8px; }
+    .report-table th { background: #f1f5f9; color: #475569; }
+    .report-table td:first-child { color: #475569; font-weight: 600; width: 34%; }
+    .report-table .section-row td { background: #f8fafc; color: #0f172a; font-weight: 700; }
+    .step-card { background: #f8fafc !important; border: 1px solid #cbd5e1 !important; page-break-inside: avoid; }
+    .step-card h3 { color: #0f172a !important; }
+    .step-card p { color: #334155 !important; }
+    .step-card.step-priority-high { border-left: 4px solid #e11d48 !important; }
+    .step-card.step-priority-medium { border-left: 4px solid #d97706 !important; }
+    .step-card.step-priority-low { border-left: 4px solid #059669 !important; }
+    .status-pill { border: 1px solid #94a3b8; }
+    .status-pill.strong_alignment, .status-pill.eligible, .status-pill.pass, .status-pill.clean {
+        background: #ecfdf5 !important;
+        color: #065f46 !important;
+        border-color: #a7f3d0 !important;
+    }
+    .status-pill.moderate_alignment, .status-pill.needs_review, .status-pill.not_run, .status-pill.unavailable {
+        background: #fffbeb !important;
+        color: #92400e !important;
+        border-color: #fde68a !important;
+    }
+    .status-pill.significant_gaps, .status-pill.not_met, .status-pill.anomalous {
+        background: #fff1f2 !important;
+        color: #9f1239 !important;
+        border-color: #fecdd3 !important;
+    }
+    .issue-item.severity-high   { border-color: #dc2626; background: #fee2e2; }
+    .issue-item.severity-medium { border-color: #d97706; background: #fef3c7; }
+    .issue-item strong { color: #111827; }
+    .issue-item p { color: #374151; }
+    .report-footer { border-top: 1px solid #e2e8f0; color: #64748b; font-size: 11px; margin-top: 24px; }
+    a { color: inherit; text-decoration: none; }
+}

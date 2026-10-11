@@ -1,0 +1,43 @@
+# ── Environment ──────────────────────────────────────────────────────────────
+.env
+*.env.local
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+venv/
+venv312/
+venv_test/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# ── ML Models (generated artifacts, not source) ───────────────────────────────
+ml-service/models/*.pkl
+
+# ── Node.js ───────────────────────────────────────────────────────────────────
+node_modules/
+backend/node_modules/
+npm-debug.log*
+.npm
+
+# ── Private uploads (user documents — never commit) ──────────────────────────
+backend/private-uploads/
+
+# ── Test artifacts ────────────────────────────────────────────────────────────
+ml-service/tmp_test_*.pdf
+.pytest_cache/
+*.pyc
+
+# ── OS / IDE ─────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/settings.json
+.idea/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log

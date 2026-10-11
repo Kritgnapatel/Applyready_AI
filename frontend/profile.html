@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile & Applications — ApplyReady AI</title>
+    <script>!function(){var t=localStorage.getItem("applyready_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t)}();</script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body class="profile-body">
+
+    <header>
+        <a href="index.html" class="logo-link">
+            <span class="logo-brand">ApplyReady</span>
+            <span class="logo-badge">AI</span>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="dashboard.html" class="nav-btn">+ New Verification</a>
+        </nav>
+    </header>
+
+    <main class="profile-container">
+        <!-- Profile Banner -->
+        <section class="profile-banner">
+            <div class="banner-avatar-wrap">
+                <img id="profileAvatar" src="https://api.dicebear.com/7.x/initials/svg?seed=Student" alt="Profile Avatar" class="profile-avatar-large">
+                <span id="authBadge" class="auth-provider-badge">Google Verified</span>
+            </div>
+            <div class="banner-user-info">
+                <h1 id="profileName">Loading Profile…</h1>
+                <p id="profileEmail" class="profile-email-text">loading…</p>
+                <div class="banner-chips">
+                    <span id="memberSinceChip" class="chip">Member since 2026</span>
+                    <span id="accountTypeChip" class="chip highlight">Verified Student</span>
+                </div>
+            </div>
+            <div class="banner-actions">
+                <a href="dashboard.html" class="primary-btn">+ Start Verification</a>
+                <button type="button" class="secondary-btn" onclick="logoutUser(event)">Sign Out</button>
+            </div>
+        </section>
+
+        <!-- Stats Overview -->
+        <section class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon">📑</div>
+                <div class="stat-content">
+                    <h3 id="statTotalApps">0</h3>
+                    <p>Applications Checked</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <h3 id="statEligibleApps">0</h3>
+                    <p>Opportunities Eligible</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎓</div>
+                <div class="stat-content">
+                    <h3 id="statTargetYear">2028</h3>
+                    <p>Expected Graduation</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Two Column Content Grid -->
+        <div class="profile-grid">
+            <!-- Left: Profile Credentials & Settings -->
+            <section class="profile-card">
+                <div class="card-head">
+                    <h2>Academic Credentials</h2>
+                    <span class="card-subtitle">Manage your student profile details</span>
+                </div>
+
+                <div id="profileMessage" class="profile-msg hidden"></div>
+
+                <form id="profileForm" onsubmit="handleProfileUpdate(event)">
+                    <div class="form-group">
+                        <label for="editName">Full Name</label>
+                        <input type="text" id="editName" name="name" required placeholder="Your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editEmail">Email Address (Read-only)</label>
+                        <input type="email" id="editEmail" name="email" readonly disabled class="readonly-input">
+                        <small class="field-hint">Primary email associated with your credentials</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editCollege">College / Institute</label>
+                        <input type="text" id="editCollege" name="college" placeholder="e.g. Indian Institute of Information Technology, Pune">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editDegree">Degree & Major</label>
+                            <input type="text" id="editDegree" name="degree" placeholder="e.g. B.Tech ECE">
+                        </div>
+                        <div class="form-group">
+                            <label for="editGradYear">Graduation Year</label>
+                            <input type="text" id="editGradYear" name="gradYear" placeholder="e.g. 2028">
+                        </div>
+                    </div>
+
+                    <div class="card-footer-action">
+                        <button type="submit" id="saveProfileBtn" class="primary-btn">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Right: My Applications History -->
+            <section class="profile-card">
+                <div class="card-head">
+                    <div class="head-title-row">
+                        <h2>My Applications & Reports</h2>
+                        <button type="button" class="refresh-btn" onclick="loadUserApplications()" title="Refresh applications">🔄</button>
+                    </div>
+                    <span class="card-subtitle">Verification results and readiness history</span>
+                </div>
+
+                <div id="applicationsList" class="applications-container">
+                    <div class="loading-state">Loading your application history…</div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <h3>ApplyReady <span>AI</span></h3>
+        <p>Evidence-Based Student Application Verification Platform</p>
+        <p>© 2026 ApplyReady AI</p>
+    </footer>
+
+    <script src="shared.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

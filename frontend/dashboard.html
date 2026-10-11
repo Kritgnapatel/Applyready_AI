@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ApplyReady AI</title>
+    <script>!function(){var t=localStorage.getItem("applyready_theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t)}();</script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-link">
+            <span class="logo-brand">ApplyReady</span>
+            <span class="logo-badge">AI</span>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#applications">My Applications</a>
+        </nav>
+    </header>
+
+    <main class="dashboard">
+        <div class="dashboard-heading">
+            <div>
+                <p class="eyebrow">YOUR WORKSPACE</p>
+                <h1>Application Dashboard</h1>
+                <p class="muted">Prepare your documents. Verify every detail. Apply confidently.</p>
+            </div>
+            <div id="serviceStatus" class="status-pill">● Checking status…</div>
+        </div>
+
+        <section class="welcome-card">
+            <div>
+                <p class="eyebrow">LET'S GET STARTED</p>
+                <h2>Make your next application count.</h2>
+                <p>Choose an opportunity category and verify your documents before submitting.</p>
+            </div>
+            <div class="welcome-icon">✦</div>
+        </section>
+
+        <section id="applications" class="dashboard-section">
+            <h2>What are you applying for?</h2>
+            <p class="muted">Select a category to begin your verification.</p>
+
+            <div class="application-grid">
+                <button class="application-card" data-domain="scholarship">
+                    <span class="app-icon">🎓</span>
+                    <span class="app-title">Scholarships</span>
+                    <span class="app-description">Academic records, income certificates and eligibility checks.</span>
+                    <span class="app-link">Select category →</span>
+                </button>
+
+                <button class="application-card" data-domain="internship">
+                    <span class="app-icon">💼</span>
+                    <span class="app-title">Internships</span>
+                    <span class="app-description">Resume, skills, qualifications and application details.</span>
+                    <span class="app-link">Select category →</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="setup-card">
+            <div>
+                <h2>Start a new verification</h2>
+                <p class="muted">Next, you'll provide the opportunity requirements and your documents.</p>
+            </div>
+            <button id="continueBtn" class="primary-btn" disabled>Continue →</button>
+        </section>
+
+        <p id="selectionMessage" class="selection-message" aria-live="polite"></p>
+
+        <!-- Recent Applications (from DB, if available) -->
+        <section class="dashboard-section" id="recentSection" style="display:none">
+            <h2>Recent Assessments</h2>
+            <p class="muted">Your most recent verified applications.</p>
+            <div id="recentList" class="recent-list"></div>
+        </section>
+    </main>
+
+    <footer>
+        <h3>ApplyReady <span>AI</span></h3>
+        <p>Prepare better. Apply smarter.</p>
+    </footer>
+
+    <script src="shared.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
