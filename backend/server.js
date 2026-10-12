@@ -5,8 +5,9 @@ const fs = require("fs");
 const crypto = require("crypto");
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const { OAuth2Client } = require("google-auth-library");
-require("dotenv").config();
 
 const googleAuthClient = new OAuth2Client();
 
