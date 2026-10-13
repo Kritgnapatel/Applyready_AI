@@ -39,12 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const data = await apiFetch("/api/health", {}, 5000);
             const mlOk = data.mlService === "ok";
-            const dbOk = data.db === "connected";
+            const dbConnected = data.db === "connected";
+            const dbOffline = data.db === "disconnected";
+            const dbLabel = dbConnected ? " · DB Connected" : (dbOffline ? " · DB Offline" : "");
 
             serviceStatus.textContent =
-                `● Backend OK${mlOk ? " · ML Ready" : " · ML Offline"}${dbOk ? " · DB Connected" : ""}`;
-            serviceStatus.style.color = mlOk ? "#4ade80" : "#fbbf24";
-            serviceStatus.style.borderColor = mlOk ? "#4ade8044" : "#fbbf2444";
+                `● Backend OK${mlOk ? " · ML Ready" : " · ML Offline"}${dbLabel}`;
+            const healthy = mlOk && !dbOffline;
+            serviceStatus.style.color = (healthy && dbConnected) ? "#4ade80" : "#fbbf24";
+            serviceStatus.style.borderColor = (healthy && dbConnected) ? "#4ade8044" : "#fbbf2444";
         } catch {
             serviceStatus.textContent = "● Backend Offline";
             serviceStatus.style.color = "#f87171";

@@ -2,8 +2,9 @@
   "name": "applyready-ai",
   "version": "1.0.0",
   "scripts": {
+    "start": "node backend/server.js",
     "start:backend": "node backend/server.js",
-    "test:ml": "cd ml-service && .\\venv312\\Scripts\\python.exe -m pytest -v"
+    "test:ml": "cd ml-service && python -m pytest -v"
   },
   "dependencies": {
     "axios": "^1.20.0",

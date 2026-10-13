@@ -53,40 +53,64 @@ async function testGoogleAuth() {
     assert("Error message is returned from token verifier", typeof forgedJson.error === "string" && forgedJson.error.length > 0);
     console.log("  Rejection reason logged:", forgedJson.error);
 
-    // 4. Test development user login integration via authenticated user creation
-    console.log("\n[4] Testing user creation and session token issuance for Google authenticated identity...");
-    const testGoogleEmail = `student.google.${Date.now()}@gmail.com`;
-    const devGoogleRes = await fetch(`${BASE}/api/auth/google`, {
+    // 4. Regression Test: Verify email-only request CANNOT impersonate another user
+    console.log("\n[4] Testing rejection of email-only impersonation attempt (no token)...");
+    const victimEmail = `victim.user.${Date.now()}@gmail.com`;
+    const impersonationRes = await fetch(`${BASE}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            email: testGoogleEmail,
-            name: "Verified Google Student",
-            avatar: "https://lh3.googleusercontent.com/a/test-avatar",
-            googleId: "google_sub_1092837465"
+            email: victimEmail,
+            name: "Victim User",
+            avatar: "https://lh3.googleusercontent.com/a/victim-avatar",
+            googleId: "fake_google_id_9999"
         })
     });
-    assert("Google identity ingestion succeeds HTTP 200", devGoogleRes.status === 200);
-    const devGoogleData = await devGoogleRes.json();
-    assert("Returns session token for Google user", !!devGoogleData.token);
-    assert("User record marked with authProvider: 'google'", devGoogleData.user?.authProvider === "google");
-    assert("User email matches Google identity", devGoogleData.user?.email === testGoogleEmail);
+    assert("Email-only impersonation attempt is rejected (HTTP 400)", impersonationRes.status === 400);
+    const impersonationJson = await impersonationRes.json();
+    assert("Rejection specifies credential ID token is required", impersonationJson.error === "Google credential ID token is required.");
+    console.log("  Rejection message verified:", impersonationJson.error);
 
-    // 5. Test accessing protected routes with Google session token
-    console.log("\n[5] Testing protected verification routes using Google session token...");
-    const meRes = await fetch(`${BASE}/api/auth/me`, {
-        headers: { "Authorization": `Bearer ${devGoogleData.token}` }
+    // 4b. Regression Test: Verify non-string or null credential is also rejected
+    const nullCredRes = await fetch(`${BASE}/api/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential: null, email: victimEmail })
     });
-    assert("GET /api/auth/me accepts Google session token (HTTP 200)", meRes.status === 200);
-    const meData = await meRes.json();
-    assert("Profile matches authenticated Google student", meData.user?.email === testGoogleEmail);
+    assert("Null credential with email is rejected (HTTP 400)", nullCredRes.status === 400);
 
-    // 6. Test application creation with Google session token
+    // 5. Test protected verification routes with valid session token
+    console.log("\n[5] Testing protected verification routes using authenticated student session...");
+    const authStudentEmail = `student.auth.${Date.now()}@gmail.com`;
+    const regStudentRes = await fetch(`${BASE}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: "Verified Student",
+            email: authStudentEmail,
+            password: "ValidSecurePassword2026!",
+            college: "IIIT Pune",
+            degree: "B.Tech ECE",
+            gradYear: "2028"
+        })
+    });
+    assert("Student registration succeeds (HTTP 201)", regStudentRes.status === 201);
+    const studentData = await regStudentRes.json();
+    assert("Session token issued for student", !!studentData.token);
+
+    const meRes = await fetch(`${BASE}/api/auth/me`, {
+        headers: { "Authorization": `Bearer ${studentData.token}` }
+    });
+    assert("GET /api/auth/me accepts session token (HTTP 200)", meRes.status === 200);
+    const meData = await meRes.json();
+    assert("Profile matches authenticated student", meData.user?.email === authStudentEmail);
+
+    // 6. Test application creation with authenticated session token
     const appRes = await fetch(`${BASE}/api/applications`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${devGoogleData.token}`
+            "Authorization": `Bearer ${studentData.token}`
         },
         body: JSON.stringify({
             domain: "scholarship",
@@ -94,9 +118,9 @@ async function testGoogleAuth() {
             requirementsText: "Minimum CGPA 8.5"
         })
     });
-    assert("Google authenticated user can create application (HTTP 201)", appRes.status === 201);
+    assert("Authenticated user can create application (HTTP 201)", appRes.status === 201);
     const appData = await appRes.json();
-    assert("Application is tied to Google user's ID", appData.application.userId === devGoogleData.user.userId);
+    assert("Application is tied to user's ID", appData.application.userId === studentData.user.userId);
 
     // 7. Verify email/password login is still completely preserved
     console.log("\n[6] Verifying email/password registration & login is preserved...");

@@ -17,32 +17,68 @@ const PORT = process.env.PORT || 5000;
 const ML_SERVICE_URL =
     process.env.ML_SERVICE_URL || "http://127.0.0.1:8000";
 
-// ─── CORS ──────────────────────────────────────────────────────────────────────
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
-    : [
-        "http://localhost:5000",
-        "http://127.0.0.1:5000",
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
-        "null"
-    ];
+// ─── CORS & ENVIRONMENT ────────────────────────────────────────────────────────
+const isProduction = process.env.NODE_ENV === "production";
+
+// Validate JWT_SECRET in production to prevent weak/example defaults
+const JWT_SECRET = process.env.JWT_SECRET;
+if (isProduction && JWT_SECRET) {
+    const weakSecrets = new Set([
+        "secret",
+        "jwt_secret",
+        "changeme",
+        "123456",
+        "applyready_jwt_secure_auth_token_key_2026",
+    ]);
+    if (weakSecrets.has(JWT_SECRET.toLowerCase()) || JWT_SECRET.length < 32) {
+        console.warn(
+            "⚠️ [SECURITY WARNING] The configured JWT_SECRET is an example or weak key (<32 chars). " +
+            "Please provide a strong, randomly generated secret in your production environment variables."
+        );
+    }
+}
+
+const defaultDevOrigins = [
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "null",
+];
+
+const explicitOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()).filter(Boolean)
+    : [];
+
+const trustedOrigins = new Set(
+    isProduction ? explicitOrigins : [...explicitOrigins, ...defaultDevOrigins]
+);
 
 app.use(
     cors({
         origin: (origin, callback) => {
-            // Allow requests with no origin (file://, curl, mobile apps)
-            if (!origin || allowedOrigins.includes(origin) || origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:")) {
-                callback(null, true);
-            } else {
-                callback(null, false);
+            // Allow same-origin requests or non-browser agents with no Origin header (curl, mobile apps)
+            if (!origin) {
+                return callback(null, true);
             }
+
+            // In production: only allow explicitly configured trusted origins
+            if (trustedOrigins.has(origin)) {
+                return callback(null, true);
+            }
+
+            // In local development only: allow localhost / 127.0.0.1 ports
+            if (!isProduction && (origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:"))) {
+                return callback(null, true);
+            }
+
+            return callback(null, false);
         },
-        methods: ["GET", "POST", "OPTIONS"],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"]
     })
 );
@@ -255,9 +291,21 @@ async function connectMongoDB() {
             { timestamps: true }
         );
 
-        User = mongoose.model("User", userSchema);
-        Application = mongoose.model("Application", applicationSchema);
-        Assessment = mongoose.model("Assessment", assessmentSchema);
+        mongoose.connection.on("disconnected", () => {
+            console.warn("MongoDB connection disconnected.");
+            dbConnected = false;
+        });
+        mongoose.connection.on("reconnected", () => {
+            console.log("MongoDB connection restored.");
+            dbConnected = true;
+        });
+        mongoose.connection.on("error", (connErr) => {
+            console.error("MongoDB runtime connection error:", connErr.message);
+        });
+
+        User = mongoose.models.User || mongoose.model("User", userSchema);
+        Application = mongoose.models.Application || mongoose.model("Application", applicationSchema);
+        Assessment = mongoose.models.Assessment || mongoose.model("Assessment", assessmentSchema);
     } catch (err) {
         console.error("MongoDB connection failed:", err.message);
         dbConnected = false;
@@ -267,8 +315,13 @@ async function connectMongoDB() {
 connectMongoDB();
 
 // ─── STATIC FRONTEND SERVING ──────────────────────────────────────────────────
-const frontendDir = path.join(__dirname, "..", "frontend");
-if (fs.existsSync(frontendDir)) {
+const candidateFrontendDirs = [
+    path.join(__dirname, "..", "frontend"),
+    path.join(__dirname, "frontend"),
+    path.join(process.cwd(), "frontend"),
+];
+const frontendDir = candidateFrontendDirs.find((dir) => fs.existsSync(dir));
+if (frontendDir) {
     app.use(express.static(frontendDir));
 }
 
@@ -454,38 +507,29 @@ async function verifyGoogleIdToken(token) {
 
 app.post("/api/auth/google", async (req, res) => {
     try {
-        const { credential, email, name, avatar, googleId } = req.body;
+        const { credential } = req.body;
         if (!process.env.GOOGLE_CLIENT_ID) {
             return res.status(500).json({
                 error: "Google Sign-In is not configured on the server. Please set GOOGLE_CLIENT_ID.",
             });
         }
 
-        let verifiedEmail = null;
-        let userName = null;
-        let userAvatar = null;
-        let userGoogleId = null;
-
-        if (credential) {
-            try {
-                const verifiedUser = await verifyGoogleIdToken(credential);
-                verifiedEmail = verifiedUser.email;
-                userName = verifiedUser.name;
-                userAvatar = verifiedUser.avatar;
-                userGoogleId = verifiedUser.googleId;
-            } catch (vErr) {
-                console.error("Google ID token verification failed:", vErr.message);
-                return res.status(401).json({ error: vErr.message || "Invalid or expired Google authentication token." });
-            }
-        } else if (email && typeof email === "string") {
-            // Development fallback for automated test scripts
-            verifiedEmail = email.trim().toLowerCase();
-            userName = name && typeof name === "string" ? name.trim() : verifiedEmail.split("@")[0];
-            userAvatar = avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(userName)}`;
-            userGoogleId = googleId || `goog_${Date.now()}`;
-        } else {
+        if (!credential || typeof credential !== "string") {
             return res.status(400).json({ error: "Google credential ID token is required." });
         }
+
+        let verifiedUser;
+        try {
+            verifiedUser = await verifyGoogleIdToken(credential);
+        } catch (vErr) {
+            console.error("Google ID token verification failed:", vErr.message);
+            return res.status(401).json({ error: vErr.message || "Invalid or expired Google authentication token." });
+        }
+
+        const verifiedEmail = verifiedUser.email;
+        const userName = verifiedUser.name;
+        const userAvatar = verifiedUser.avatar;
+        const userGoogleId = verifiedUser.googleId;
 
         const normEmail = verifiedEmail;
 
@@ -692,7 +736,7 @@ app.get("/api/health", async (req, res) => {
     res.json({
         status: "OK",
         service: "ApplyReady AI Backend",
-        db: dbConnected ? "connected" : "stateless",
+        db: dbConnected ? "connected" : (process.env.MONGODB_URI ? "disconnected" : "stateless"),
         mlService: mlStatus,
     });
 });
@@ -1415,6 +1459,19 @@ async function runAssessment(req) {
     }
 
     const rawCvText = resumeExtraction?.raw_text || resumeExtraction?.text || "";
+
+    // Clean up temporary disk files safely (ephemeral container storage)
+    if (req.files) {
+        for (const fileGroup of Object.values(req.files)) {
+            if (Array.isArray(fileGroup)) {
+                for (const f of fileGroup) {
+                    if (f && f.path) {
+                        fs.promises.unlink(f.path).catch(() => {});
+                    }
+                }
+            }
+        }
+    }
 
     return {
         files,
