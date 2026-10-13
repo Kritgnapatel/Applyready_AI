@@ -1123,7 +1123,11 @@ async function loadGenAI(app) {
                 body: JSON.stringify(payload),
             }, 20000);
         } catch (backendErr) {
-            // Direct ML service fallback if backend proxy fails
+            // Direct ML service fallback only in local development if backend proxy fails
+            const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+            if (!isLocal) {
+                throw backendErr;
+            }
             const directResp = await fetch("http://localhost:8000/genai-explain", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

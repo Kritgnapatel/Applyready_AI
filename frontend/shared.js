@@ -5,10 +5,33 @@
 
 "use strict";
 
-// ── Backend URL ───────────────────────────────────────────────────────────────
-const API_BASE = (typeof window !== "undefined" && window.location.protocol.startsWith("http") && window.location.port === "5000")
-    ? ""
-    : "http://localhost:5000";
+// ── Backend API Base URL Resolution ──────────────────────────────────────────
+// In production (or when served by the backend at http://localhost:5000), use relative same-origin paths.
+// Only fallback to http://localhost:5000 when running in local development environments that are external
+// to the backend server (e.g. file://, Live Server on port 5500, or dev tooling on port 3000).
+function resolveApiBase(loc) {
+    if (!loc) return "";
+    const protocol = loc.protocol || "";
+    const hostname = loc.hostname || "";
+    const port = loc.port || "";
+
+    // file:// protocol (local filesystem preview without web server)
+    if (protocol === "file:") {
+        return "http://localhost:5000";
+    }
+
+    // Local development server on a different port (e.g. Live Server :5500, Vite :3000)
+    const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1" || hostname.endsWith(".local");
+    if (isLocalhost && port && port !== "5000") {
+        return "http://localhost:5000";
+    }
+
+    // In all production environments (e.g. onrender.com, custom domains) AND when served by backend on port 5000:
+    // Always use relative, same-origin API paths (/api/...)
+    return "";
+}
+
+const API_BASE = typeof window !== "undefined" ? resolveApiBase(window.location) : "";
 
 // ── Auth helpers ─────────────────────────────────────────────────────────────
 function getAuthToken() {
@@ -428,3 +451,15 @@ function renderMarkdown(md) {
     return out.join("\n");
 }
 
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+        resolveApiBase,
+        getAuthToken,
+        getAuthUser,
+        setAuth,
+        clearAuth,
+        logoutUser,
+        renderMarkdown,
+        escapeHtml,
+    };
+}
