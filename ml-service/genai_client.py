@@ -18,7 +18,7 @@ import urllib.error
 from typing import Optional, List, Dict, Any
 
 _MODEL_NAME = "gemini-3.5-flash-lite"
-_API_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/{_MODEL_NAME}:generateContent"
+_CANDIDATE_MODELS = ["gemini-3.5-flash-lite", "gemini-2.5-flash", "gemini-flash-latest"]
 
 _SYSTEM_INSTRUCTIONS = """
 You are an academic application readiness assistant. Your job is to help students understand
@@ -242,78 +242,89 @@ def explain_verification_results(
         },
     }
 
-    url = f"{_API_ENDPOINT}?key={api_key}"
     headers = {"Content-Type": "application/json"}
-    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
+    body_bytes = json.dumps(payload).encode("utf-8")
 
-    try:
-        with urllib.request.urlopen(req, timeout=18) as response:
-            res_data = json.loads(response.read().decode("utf-8"))
+    last_error_note = None
+    last_error_method = "http_error"
 
-        candidates = res_data.get("candidates", [])
-        if not candidates:
+    for model_name in _CANDIDATE_MODELS:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+        req = urllib.request.Request(url, data=body_bytes, headers=headers, method="POST")
+
+        try:
+            with urllib.request.urlopen(req, timeout=12) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+
+            candidates = res_data.get("candidates", [])
+            if not candidates:
+                continue
+
+            content_parts = candidates[0].get("content", {}).get("parts", [])
+            text = "".join(p.get("text", "") for p in content_parts).strip()
+
+            if not text:
+                continue
+
+            # Safety: ensure disclaimer is present
+            if "automated assessment" not in text.lower():
+                text += "\n\nThis is an automated assessment suggestion, not an official decision."
+
             return {
                 "available": True,
-                "text": None,
-                "method": "empty_response",
-                "note": "The AI model returned an empty response.",
+                "text": text,
+                "method": "gemini_rest",
+                "model": model_name,
             }
 
-        content_parts = candidates[0].get("content", {}).get("parts", [])
-        text = "".join(p.get("text", "") for p in content_parts).strip()
+        except urllib.error.HTTPError as http_err:
+            status_code = http_err.code
+            body_text = http_err.read().decode("utf-8", errors="ignore")
+            if status_code in (400, 401, 403):
+                # Invalid API credentials: do not keep trying other models
+                return {
+                    "available": False,
+                    "text": None,
+                    "method": "auth_error",
+                    "note": f"Invalid Gemini API credentials or permissions (HTTP {status_code}). Check your GEMINI_API_KEY.",
+                }
+            elif status_code == 429:
+                last_error_method = "rate_limit"
+                last_error_note = "Gemini API rate limit reached. Please try again shortly."
+            elif status_code == 503:
+                last_error_method = "model_overloaded"
+                last_error_note = "Upstream AI model is temporarily overloaded (HTTP 503). Your verification findings are fully preserved."
+            elif status_code == 404:
+                last_error_method = "model_not_found"
+                last_error_note = f"Model {model_name} is not available in current region/endpoint."
+            else:
+                last_error_method = "http_error"
+                last_error_note = f"Gemini API returned HTTP {status_code}."
+            # Continue loop to next candidate model
+            continue
 
-        if not text:
+        except urllib.error.URLError as url_err:
             return {
-                "available": True,
+                "available": False,
                 "text": None,
-                "method": "empty_response",
-                "note": "The AI model returned an empty response.",
+                "method": "network_error",
+                "note": f"Could not reach Gemini service: {url_err.reason}",
+            }
+        except TimeoutError:
+            last_error_method = "timeout"
+            last_error_note = f"AI service timed out after 12s on model {model_name}."
+            continue
+        except Exception as e:
+            return {
+                "available": False,
+                "text": None,
+                "method": "error",
+                "note": f"AI service error: {str(e)[:100]}",
             }
 
-        # Safety: ensure disclaimer is present
-        if "automated assessment" not in text.lower():
-            text += "\n\nThis is an automated assessment suggestion, not an official decision."
-
-        return {
-            "available": True,
-            "text": text,
-            "method": "gemini_rest",
-            "model": _MODEL_NAME,
-        }
-
-    except urllib.error.HTTPError as http_err:
-        status_code = http_err.code
-        body_text = http_err.read().decode("utf-8", errors="ignore")
-        if status_code == 429:
-            note = "AI service rate limit reached. Please try again later."
-        elif status_code in (400, 401, 403):
-            note = f"Invalid API credentials or permissions (HTTP {status_code}). Check your GEMINI_API_KEY."
-        else:
-            note = f"AI service returned HTTP {status_code}."
-        return {
-            "available": False,
-            "text": None,
-            "method": "http_error",
-            "note": note,
-        }
-    except urllib.error.URLError as url_err:
-        return {
-            "available": False,
-            "text": None,
-            "method": "network_error",
-            "note": f"Could not reach Gemini service: {url_err.reason}",
-        }
-    except TimeoutError:
-        return {
-            "available": False,
-            "text": None,
-            "method": "timeout",
-            "note": "AI service timed out after 18 seconds.",
-        }
-    except Exception as e:
-        return {
-            "available": False,
-            "text": None,
-            "method": "error",
-            "note": f"AI service error: {str(e)[:100]}",
-        }
+    return {
+        "available": False,
+        "text": None,
+        "method": last_error_method,
+        "note": last_error_note or "Upstream AI service is temporarily unavailable. Your verification findings are fully preserved.",
+    }

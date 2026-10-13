@@ -1125,17 +1125,29 @@ async function loadGenAI(app) {
         } catch (backendErr) {
             // Direct ML service fallback only in local development if backend proxy fails
             const isLocal = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
-            if (!isLocal) {
-                throw backendErr;
+            if (isLocal) {
+                try {
+                    const directResp = await fetch("http://localhost:8000/genai-explain", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                        signal: AbortSignal.timeout(15000),
+                    });
+                    if (directResp.ok) {
+                        data = await directResp.json();
+                    }
+                } catch {
+                    // Ignore direct local failure and provide graceful advisory
+                }
             }
-            const directResp = await fetch("http://localhost:8000/genai-explain", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-                signal: AbortSignal.timeout(15000),
-            });
-            if (!directResp.ok) throw backendErr;
-            data = await directResp.json();
+            if (!data) {
+                data = {
+                    available: false,
+                    text: null,
+                    method: "unavailable",
+                    note: "AI Assistant Guidance is temporarily unavailable. Your core assessment and verification findings are fully preserved."
+                };
+            }
         }
 
         if (data.available && data.text) {

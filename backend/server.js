@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const ML_SERVICE_URL =
-    process.env.ML_SERVICE_URL || "http://127.0.0.1:8000";
+    (process.env.ML_SERVICE_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
 
 // ─── CORS & ENVIRONMENT ────────────────────────────────────────────────────────
 const isProduction = process.env.NODE_ENV === "production";
@@ -1811,7 +1811,18 @@ app.post("/api/genai-explain", requireAuth, async (req, res) => {
         }));
 
         if (!mlResponse.ok) {
-            return res.status(mlResponse.status).json(data);
+            const rawNote = data?.note || (typeof data?.error === "string" ? data.error : null);
+            const userNote = rawNote
+                ? `${rawNote}. Your core assessment and verification findings are fully preserved.`
+                : `AI Assistant Guidance is temporarily unavailable (HTTP ${mlResponse.status}). Your core assessment and verification findings are fully preserved.`;
+
+            return res.status(200).json({
+                available: false,
+                text: null,
+                method: "upstream_unavailable",
+                statusCode: mlResponse.status,
+                note: userNote
+            });
         }
 
         // If applicationId provided and DB connected, persist GenAI explanation
@@ -1830,11 +1841,11 @@ app.post("/api/genai-explain", requireAuth, async (req, res) => {
 
         return res.json(data);
     } catch (err) {
-        return res.status(502).json({
+        return res.status(200).json({
             available: false,
             text: null,
             method: "proxy_error",
-            note: "ML GenAI service unavailable: " + (err.name === "AbortError" ? "Request timed out" : err.message)
+            note: "AI Assistant Guidance is temporarily unavailable (" + (err.name === "AbortError" ? "Request timed out" : err.message) + "). Your core assessment and verification findings are fully preserved."
         });
     }
 });
